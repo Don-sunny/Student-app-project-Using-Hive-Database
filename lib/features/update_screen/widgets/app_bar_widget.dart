@@ -24,7 +24,7 @@ class AppBarWidget extends StatelessWidget {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SearchScreen(),
+                          builder: (context) => SearchScreen(),
                         )),
                     child: Container(
                       height: 50,

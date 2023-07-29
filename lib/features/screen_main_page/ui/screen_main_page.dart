@@ -7,7 +7,10 @@ import 'package:student_app/features/student_list_screen/ui/student_list.dart';
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
-  final _pages = [const AddStudent(), const StudentListScreen()];
+  final _pages = [
+    AddStudent(),
+    StudentListScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {

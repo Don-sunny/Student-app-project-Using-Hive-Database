@@ -1,9 +1,39 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:student_app/db/student_model.dart';
 import 'package:student_app/features/add_student_screen.dart/widgets/text_form_widget.dart';
 
-class AddStudent extends StatelessWidget {
-  const AddStudent({super.key});
+class AddStudent extends StatefulWidget {
+  const AddStudent({Key? key}) : super(key: key);
+
+  @override
+  State<AddStudent> createState() => _AddStudentState();
+}
+
+class _AddStudentState extends State<AddStudent> {
+  TextEditingController nameEditingController = TextEditingController();
+  TextEditingController emialEditingController = TextEditingController();
+  TextEditingController numberEditingController = TextEditingController();
+  Box<StudentModel> studentBox = Hive.box<StudentModel>('student_model');
+
+  File? image;
+  String? imagePath;
+
+  Future<void> picker() async {
+    final imageSelected =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (imageSelected != null) {
+      setState(() {
+        image = File(imageSelected.path);
+        imagePath = image!.path;
+      });
+    } else {
+      imagePath = 'assets/images/avartar_image.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +45,8 @@ class AddStudent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 500,
-                  width: 350,
+                  height: 600,
+                  width: 400,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: const AssetImage(
@@ -28,55 +58,70 @@ class AddStudent extends StatelessWidget {
                       ),
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    // color: Colors.,
                     border: Border.all(color: Colors.black),
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CircleAvatar(
-                        radius: 90,
-                        // backgroundColor: Colors.white,
-                        backgroundImage: const AssetImage(
-                          'assets/images/avartar_image.png',
-                        ),
+                      const SizedBox(height: 10),
+                      InkWell(
+                        onTap: () async {
+                          await picker();
+                        },
                         child: Stack(
                           children: [
+                            Container(
+                              height: 130,
+                              width: 130,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape
+                                    .circle, // Set the container shape to a circle
+                              ),
+                              child: imagePath != null
+                                  ? ClipOval(
+                                      child: Image.file(
+                                        File(imagePath!),
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    )
+                                  : ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/avartar_image.png',
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    ),
+                            ),
                             Positioned(
-                              right: 30,
-                              bottom: 30,
+                              right: 0,
+                              bottom: 20,
                               child: Container(
-                                height: 30,
-                                width: 30,
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
+                                height: 25,
+                                width: 25,
+                                decoration: const BoxDecoration(
                                     color: Colors.white,
-                                    // borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 7,
-                                          blurRadius: 10),
-                                    ]),
-                                child: const Icon(
-                                  CupertinoIcons.add,
-                                  size: 25,
-                                  color: Colors.blue,
-                                ),
+                                    shape: BoxShape.circle),
+                                child: const Icon(CupertinoIcons.add),
                               ),
                             )
                           ],
                         ),
                       ),
-                      const TextFormFiledWidget(hintText: 'Enter your name'),
-                      const TextFormFiledWidget(
-                        hintText: 'Enter your mail id',
+                      TextFormFiledWidget(
+                        hintText: 'Enter your name',
+                        controller: nameEditingController,
                       ),
-                      const TextFormFiledWidget(
-                          hintText: 'Enter your phone number'),
+                      TextFormFiledWidget(
+                        hintText: 'Enter your mail id',
+                        controller: emialEditingController,
+                      ),
+                      TextFormFiledWidget(
+                        hintText: 'Enter your phone number',
+                        controller: numberEditingController,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -84,7 +129,23 @@ class AddStudent extends StatelessWidget {
                             width: 100,
                             margin: const EdgeInsets.only(top: 15, right: 10),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                if (nameEditingController.text.isNotEmpty &&
+                                    emialEditingController.text.isNotEmpty &&
+                                    numberEditingController.text.isNotEmpty) {
+                                  StudentModel newStudent = StudentModel(
+                                    name: nameEditingController.text,
+                                    emailId: emialEditingController.text,
+                                    phone: numberEditingController.text,
+                                    imagePath: imagePath ??
+                                        'assets/images/avartar_image.png',
+                                  );
+                                  studentBox.add(newStudent);
+                                  nameEditingController.text = '';
+                                  emialEditingController.text = '';
+                                  numberEditingController.text = '';
+                                }
+                              },
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
                                   const RoundedRectangleBorder(
@@ -98,10 +159,10 @@ class AddStudent extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

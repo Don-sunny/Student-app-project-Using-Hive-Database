@@ -5,10 +5,12 @@ class TextFormFiledWidget extends StatelessWidget {
       {super.key,
       this.height = 50,
       this.width = double.infinity,
-      required this.hintText});
+      required this.hintText,
+      required this.controller});
   final double height;
   final double width;
   final String hintText;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,13 @@ class TextFormFiledWidget extends StatelessWidget {
         width: width,
         margin: const EdgeInsets.only(top: 20),
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child: TextField(
+        child: TextFormField(
+          controller: controller,
           decoration: InputDecoration(
+            hintStyle: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w400,
+            ),
             hintText: hintText,
             border: const OutlineInputBorder(
               borderSide: BorderSide(width: 5),
