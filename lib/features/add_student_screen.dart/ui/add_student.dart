@@ -144,6 +144,9 @@ class _AddStudentState extends State<AddStudent> {
                                   nameEditingController.text = '';
                                   emialEditingController.text = '';
                                   numberEditingController.text = '';
+                                  setState(() {
+                                    imagePath = '';
+                                  });
                                 }
                               },
                               style: ButtonStyle(

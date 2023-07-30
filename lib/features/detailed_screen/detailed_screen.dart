@@ -9,11 +9,13 @@ class DetailedScreen extends StatelessWidget {
       required this.name,
       required this.email,
       required this.phone,
-      this.imagePath});
+      this.imagePath,
+      required this.id});
 
   final String name;
   final String email;
   final String phone;
+  final int id;
   String? imagePath;
 
   @override

@@ -18,7 +18,6 @@ class SearchList extends StatelessWidget {
   final List<StudentModel> studentList;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Container(
       height: 80,
@@ -74,16 +73,16 @@ class SearchList extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(CupertinoIcons.pencil),
-              ),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(CupertinoIcons.delete))
-            ],
-          )
+          // Row(
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {},
+          //       icon: const Icon(CupertinoIcons.pencil),
+          //     ),
+          //     IconButton(
+          //         onPressed: () {}, icon: const Icon(CupertinoIcons.delete))
+          //   ],
+          // )
         ],
       ),
     );

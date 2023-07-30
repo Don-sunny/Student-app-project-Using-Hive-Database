@@ -35,6 +35,7 @@ class StudentListScreen extends StatelessWidget {
                         phone: student.phone,
                         index: index,
                         imagePath: student.imagePath,
+                        id: student.key,
                       );
                     }),
                   );

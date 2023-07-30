@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:student_app/db/student_model.dart';
 import 'package:student_app/features/detailed_screen/detailed_screen.dart';
+import 'package:student_app/features/update_screen/ui/update_screen.dart';
 
 // ignore: must_be_immutable
 class StudentListWidget extends StatelessWidget {
@@ -14,11 +15,13 @@ class StudentListWidget extends StatelessWidget {
       required this.emailId,
       required this.phone,
       required this.index,
-      this.imagePath});
+      this.imagePath,
+      required this.id});
 
   final String name;
   final String emailId;
   final String phone;
+  final int id;
   String? imagePath;
   final int index;
 
@@ -36,6 +39,7 @@ class StudentListWidget extends StatelessWidget {
                 email: emailId,
                 phone: phone,
                 imagePath: imagePath,
+                id: id,
               ),
             ));
       },
@@ -99,10 +103,24 @@ class StudentListWidget extends StatelessWidget {
                               spreadRadius: 5,
                               blurRadius: 10),
                         ]),
-                    child: const Icon(
-                      CupertinoIcons.pencil,
-                      size: 25,
-                      color: Colors.blue,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return UpdateScreen(
+                                name: name,
+                                emailid: emailId,
+                                phone: phone,
+                                id: id,
+                                profile: imagePath);
+                          },
+                        ));
+                      },
+                      child: const Icon(
+                        CupertinoIcons.pencil,
+                        size: 25,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                   const SizedBox(
